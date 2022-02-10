@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {IonList, IonItem, IonLabel, IonNote, IonButton, IonInput} from '@ionic/react';
+import React from 'react';
+import {IonList, IonItem, IonNote, IonButton, IonInput} from '@ionic/react';
 import './ListBands.css'
 
 interface Bands{
@@ -14,21 +14,15 @@ type Props = {
     setText:any;
     votar:any;
     eliminar:any;
-    setId: any;
     cambiarNombre:any
 }
 
 
-export const ListExample: React.FC<Props> = ({bands,text, setText, votar, eliminar, setId, cambiarNombre}) => {
+export const ListExample: React.FC<Props> = ({bands,text, setText, votar, eliminar, cambiarNombre}) => {
 
-    const [ name, setName ] = useState<string>("");
-
-    // useEffect(()=>{
-
-    // }, [bands])
+    
     
     const handleClickVotes = ( id: string) => {
-        setId(id)
         votar(id)       
       }
 

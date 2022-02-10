@@ -23,7 +23,6 @@ const Home: React.FC = () => {
   const [online, setOnline] = useState<boolean>(false)
   const [text, setText] = useState<string>();
   const [bands, setBands] = useState<Bands[]>([]);
-  const [id, setId] = useState<string>("")
 
   // const [number, setNumber] = useState<number>();
   useEffect(()=>{
@@ -91,7 +90,7 @@ const Home: React.FC = () => {
           <IonRow>
             <IonCol size="9" >
               <div>
-                <ListExample bands={bands} setBands={setBands} text={text} setText={setText} votar={votar} eliminar={eliminar} setId={setId} cambiarNombre={cambiarNombre}/>
+                <ListExample bands={bands} setBands={setBands} text={text} setText={setText} votar={votar} eliminar={eliminar} cambiarNombre={cambiarNombre}/>
                 
               </div>
             </IonCol>
