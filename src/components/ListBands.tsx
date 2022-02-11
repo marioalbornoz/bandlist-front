@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {IonList, IonItem, IonNote, IonButton, IonInput} from '@ionic/react';
 import './ListBands.css'
+import { SocketContext } from '../context/SocketContext';
 
 interface Bands{
     name: string;
@@ -8,31 +9,39 @@ interface Bands{
     votes: number;
 }
 type Props = {
-    bands: Bands[];
-    setBands: any;
-    text?: string;
-    setText:any;
-    votar:any;
-    eliminar:any;
-    cambiarNombre:any
+    
 }
 
 
-export const ListExample: React.FC<Props> = ({bands,text, setText, votar, eliminar, cambiarNombre}) => {
+export const ListExample: React.FC<Props> = () => {
 
+    const {socket} = useContext(SocketContext)
+
+    const [bands, setBands] = useState<Bands[]>([]);
+
+
+    useEffect(()=>{
+        socket.on('current-bands',(bands: any[]) => {
+          setBands(bands);
+          
+        })
+        return ()=> socket.off('current-bands')
     
+      },[socket]);
     
     const handleClickVotes = ( id: string) => {
-        votar(id)       
+        socket.emit('votar-banda', id)
+    
       }
 
     const eliminarBanda=(id:string)=>{
-        eliminar(id)
+        socket.emit('eliminar-banda', id)
+
     }
 
     const handleClickName = (name: string, id: string) => {
-        console.log("nombre ",name);
-        cambiarNombre(id,name)
+        socket.emit('renombrar-banda', {id, name})
+
         
     }
    
@@ -44,14 +53,12 @@ export const ListExample: React.FC<Props> = ({bands,text, setText, votar, elimin
         <IonList>
             <IonList>
                   {
-                    bands.map(band => <IonItem key={band.id}  >
-                        <IonNote slot="end" color="success">{band.votes}</IonNote>
+                    bands?.map((band )=> <IonItem key={band.id}  >
+                        <IonNote slot="end" color="success"><h4>{band.votes}</h4></IonNote>
                         <IonInput value={band.name} placeholder={band.name} onIonBlur={(e: any)=>handleClickName(e.target.value, band.id)} ></IonInput>
-                        {/* <IonLabel >{band.name}</IonLabel> */}
                         <IonButton onClick={() => handleClickVotes(band.id)}>+1</IonButton>
                         <IonButton color="danger" onClick={(e: React.SyntheticEvent<EventTarget>) => eliminarBanda(band.id)}>Eliminar!</IonButton>
 
-                        {/* <IonCheckbox slot="start" /> */}
                     </IonItem>)
                 }
             </IonList>
